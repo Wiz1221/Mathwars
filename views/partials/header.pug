@@ -14,9 +14,9 @@
         li(class=(title == 'Home') ? 'active' : undefined)
           a(href='/') Home
         li(class=(title == 'Post Question') ? 'active' : undefined)
-          a(href='/PostQuestions') Post Question
+          a(href='/Compose') Compose
         li(class=(title == 'Archive') ? 'active' : undefined)
-          a(href='/Archive') Archive
+          a(href='/viewQuestions') View Questions
         li(class=(title == '1v1') ? 'active' : undefined)
           a(href='/1v1') 1v1
         li
@@ -39,6 +39,10 @@
             ul.dropdown-menu
               li
                 a(href='/account') My Account
+              li
+                a(href='/user-question') My Questions
+              li
+                a(href='/user-competition') Track My Competitions
               li.divider
               li
                 a(href='/logout') Logout

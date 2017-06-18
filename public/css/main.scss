@@ -68,3 +68,30 @@ textarea {
 .fa {
   margin-right: 6px;
 }
+
+// Post Questions page
+//---------------------------
+
+#inputQuestionWrapper, #wmd-input {
+  width: 600px;
+  height: 150px;
+  font-family: "Times New Roman";
+}
+
+#wmd-preview, .wmd-preview{
+  font-family: "Times New Roman";
+}
+
+#submitQuestion {
+  margin-top: 10px;
+}
+
+.wmd-button > span {
+    background-image:
+      url('/wmd-buttons.png');
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}

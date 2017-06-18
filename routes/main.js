@@ -1,10 +1,11 @@
-var postingController = require('../controllers/postquestions');
-var archieveController = require('../controllers/archive');
+var postingController = require('../controllers/questionstore');
+var archiveController = require('../controllers/archive');
 var onevoneController = require('../controllers/onevone');
 
 module.exports = function(app){
-  app.get('/PostQuestions', postingController.getPost);
-  // app.get('/Archive', archieveController.getArchive);
+  app.get('/Compose', postingController.getPost);
+  app.post('/Compose', postingController.storePost);
+  app.get('/viewQuestions', archiveController.getArchive);
   // app.get('/1v1', onevoneController.getOneVOne);
 
 }

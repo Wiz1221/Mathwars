@@ -5,8 +5,26 @@ block content
     h2
       i.fa.fa-picture-o
       | Posting Questions
-      
-  .input-group
-      input.form-control(type='text', placeholder='Msg')
-  button.btn.btn-primary(type='submit') Send
+    #editform.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+            h4#promptMessageTitle.modal-title Success
+          #promptMessage.modal-body
+            | Post Successful
+          .modal-footer
+            button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
+  .row
+    .col-sm-7
+      #wmd-button-bar
+      #inputQuestionWrapper.input-group
+          textarea#wmd-input.wmd-input.processed.form-control(type='text', placeholder='type your question here')
+      #wmd-preview.wmd-preview
+      button#displayQuestion.btn.btn-primary(type='submit') Display
+      button#submitQuestion.btn.btn-primary(type='submit') Submit
+      button#saveQuestion.btn.btn-primary(type='submit') Save As Draft
+    .col-sm-5
+      button#theta.btn.btn-primary(type='submit') $\theta$
   
