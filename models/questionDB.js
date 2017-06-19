@@ -1,18 +1,21 @@
 const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
-  question: String,
+  question: {
+    title: String,
+    topic: String,
+    content:String,
+  },
   createdBy: {
     id: String,
     name: String
   },
   answer: [{
-    id:String,
-    content: String
-  }],
-  answeredBy: [{
-    id: String,
-    name: String
+    content:String,
+    answeredBy: {
+      id: String,
+      name: String
+    }
   }]
 },{timestamps: true
 }

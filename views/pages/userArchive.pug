@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  .page-header
+    h2
+      i.fa.fa-picture-o
+      | View Your Questions and Answers
+  .row#questionPreview
+    h3 My Questions
+    each question in questionByUser
+      .col-sm-3
+        form(action='/questionDetails/updateByUser/'+question._id, method='get')
+          button(name=id value=question._id,type='submit')
+            p= question.question.content
+            p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear() 
+            
+  .row#answerPreview
+    h3 Questions which I answered
+    each question in answerByUser
+      .col-sm-3
+        form(action='/questionDetails/updateByUser/'+question._id, method='get')
+          button(name=id value=question._id,type='submit')
+            p= question.question.content
+            p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear() 

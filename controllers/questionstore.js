@@ -12,22 +12,36 @@ exports.storePost = (req, res, next) => {
   if(!req.user){
     res.send(['Please Login']);
   }else{
-  const newQuestion = new Question();
-  newQuestion.question = req.body.question;
-  newQuestion.createdBy = {
-    id: req.user.id,
-    name: req.user.profile.name
-  };
-  newQuestion.answer = [];
-  newQuestion.answeredBy = [];
-  newQuestion.save(
-    function(err){
-                if(err){
-                  console.log(err);
-                }
-              //   return done(null, newQuestion, req.flash('loginMessage', 'Logged in successfully'));
-              });
-
-  res.json(newQuestion);
+    const newQuestion = new Question();
+    newQuestion.question = {
+      title: req.body.title,
+      topic: req.body.topic,
+      content: req.body.content
+    }
+    newQuestion.createdBy = {
+      id: req.user.id,
+      name: req.user.profile.name
+    };
+    if(req.body.answer!==''){
+      newQuestion.answer = [];
+      newQuestion.answer.push({
+        content:req.body.answer,
+        answeredBy: {
+          id: req.user.id,
+          name: req.user.profile.name
+        }
+      })
+    }else{
+      newQuestion.answer = '';
+      newQuestion.answeredBy = [];
+    }
+    newQuestion.save(
+      function(err){
+        if(err){
+          console.log(err);
+        }
+      //   return done(null, newQuestion, req.flash('loginMessage', 'Logged in successfully'));
+    });
+    res.json(newQuestion);
 }
 }

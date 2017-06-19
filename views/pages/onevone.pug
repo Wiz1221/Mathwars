@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+  .page-header
+    h2
+      i.fa.fa-picture-o
+      | 1v1 Competition
+    p Below are some questions set for you to use for Competition. Select them to start or choose your own questions below
+  .row#presetQuestions
+      .col-sm-3
+        form
+          button#Proportions.btn.btn-default(type='submit')
+            p Proportions
+      .col-sm-3
+        form
+          button#Integration.btn.btn-default(type='submit')
+            p Integration
+      .col-sm-3
+        form
+          button#Vectors.btn.btn-default(type='submit')
+            p Vectors
+      .col-sm-3
+        form
+          button#ComplexNumbers.btn.btn-default(type='submit')
+            p Complex Numbers
+  .row#questionPreview
+    h4 Choose Questions
+    each question in questions
+      .col-sm-3
+        form(name=question._id, method='get')
+          button.btn.btn-default(name=id value=question._id,type='button')
+            p= question.question.content
+            p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()

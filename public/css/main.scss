@@ -72,18 +72,22 @@ textarea {
 // Post Questions page
 //---------------------------
 
-#inputQuestionWrapper, #wmd-input {
-  width: 600px;
+#inputQuestionWrapper, #wmd-input, #Answer, #inputAnswerWrapper {
+  width: 100%;
   height: 150px;
   font-family: "Times New Roman";
 }
 
-#wmd-preview, .wmd-preview{
+#wmd-preview, .wmd-preview, #Title, #Topic {
   font-family: "Times New Roman";
 }
 
 #submitQuestion {
   margin-top: 10px;
+}
+
+#mathSymbolWrapper {
+  // position: fixed;
 }
 
 .wmd-button > span {

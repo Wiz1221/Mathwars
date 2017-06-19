@@ -6,7 +6,9 @@ block content
       i.fa.fa-picture-o
       | View Questions
   .row#questionPreview
-    - for (var x=0; x<questions.length; x++)
+    each question in questions
       .col-sm-3
-        a(href='#') #{questions[x].question}
-        p created on #{questions[x]._id.getTimestamp()}
+        form(action='/questionDetails/'+question._id, method='get')
+          button(name=id value=question._id,type='submit')
+            p= question.question.content
+            p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear() 

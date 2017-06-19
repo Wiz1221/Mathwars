@@ -4,7 +4,7 @@ block content
   .page-header
     h2
       i.fa.fa-picture-o
-      | Compose
+      | Question Details
   #editform.modal.fade(tabindex='-1', role='dialog')
     .modal-dialog(role='document')
       .modal-content
@@ -16,22 +16,29 @@ block content
           | Post Successful
         .modal-footer
           button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
+  .row#questionPreview
+      .col-sm-7
+        h4 Question
+        each question in questions
+          p#getQuestionId(data-id=question._id)= question.question.content
+          p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
   .row
     .col-sm-7
-      h4 Question
-      form.form-horizontal
-        .form-group
-          label.col-sm-2.control-label(for='questionTitle') Title
-          .col-sm-10
-            input#Title.form-control(type='text', placeholder='Title')
-        .form-group
-          label.col-sm-2.control-label(for='questionTopic') Topic
-          .col-sm-10
-            input#Topic.form-control(type='text', placeholder='example: Integration')
-      #wmd-button-bar
+      each question in questions
+        h4 Answers
+        each answer,index in question.answer
+          if answer.length==0
+            p this question has no answer, help post an answer :)
+          else
+            span= 'Answer'+ ' ' + parseInt(index+1)
+              p= answer.content
+              p= 'created by'+' '+ answer.answeredBy.name
+              p= 'created on'+" "+ answer._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+  .row
+    .col-sm-7
+      h4 Update Question
       #inputQuestionWrapper.input-group
-          textarea#wmd-input.wmd-input.processed.form-control(type='text', placeholder='type your question here')
-      #wmd-preview.wmd-preview
+          textarea#Question.wmd-input.processed.form-control(type='text', placeholder='type your question here')
     .col-sm-5
       #mathSymbolWrapper
         button#theta.btn.btn-primary(type='submit') $\theta$
@@ -56,14 +63,10 @@ block content
         button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
         button#forAll.btn.btn-primary(type='submit') $\forall$
         button#belongTo.btn.btn-primary(type='submit') $\in$
-      
+  button#submitQuestion.btn.btn-primary(type='submit') Submit
   .row
     .col-sm-7
-      h4 Answer
+      h4 Post or update your answer
       #inputAnswerWrapper.input-group
           textarea#Answer.wmd-input.processed.form-control(type='text', placeholder='type your question here')
-    .col-sm-5
-  //- button#theta.btn.btn-primary(type='submit') $\theta$
-  button#submitAll.btn.btn-primary(type='submit') Submit
-  button#saveQuestion.btn.btn-primary(type='submit') Save As Draft
-  
+  button#submitAnswer.btn.btn-primary(type='submit') Submit

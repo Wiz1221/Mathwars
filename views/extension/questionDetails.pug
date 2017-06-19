@@ -1,3 +1,68 @@
 extends ../layout
 
 block content
+  .page-header
+    h2
+      i.fa.fa-picture-o
+      | Question Details
+  #editform.modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4#promptMessageTitle.modal-title Success
+        #promptMessage.modal-body
+          | Post Successful
+        .modal-footer
+          button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
+  .row#questionPreview
+      .col-sm-7
+        h4 Question
+        each question in questions
+          p#getQuestionId(data-id=question._id)= question.question.content
+          p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+  .row
+    .col-sm-7
+      each question in questions
+        h4 Answers
+        each answer,index in question.answer
+          if answer.length==0
+            p this question has no answer, help post an answer :)
+          else
+            span= 'Answer'+ ' ' + parseInt(index+1)
+              p= answer.content
+              p= 'created by'+' '+ answer.answeredBy.name
+              p= 'created on'+" "+ answer._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+  .row
+    .col-sm-7
+      h4 Post an answer
+      #inputAnswerWrapper.input-group
+          textarea#Answer.wmd-input.processed.form-control(type='text', placeholder='type your question here')
+    .col-sm-5
+      #mathSymbolWrapper
+        button#theta.btn.btn-primary(type='submit') $\theta$
+        button#cosine.btn.btn-primary(type='submit') $\cos$
+        button#sine.btn.btn-primary(type='submit') $\sin$
+        button#pi.btn.btn-primary(type='submit') $\pi$
+        button#alpha.btn.btn-primary(type='submit') $\alpha$
+        button#beta.btn.btn-primary(type='submit') $\beta$
+        button#mu.btn.btn-primary(type='submit') $\mu$
+        button#power.btn.btn-primary(type='submit') $x^{n}$
+        button#vectorial.btn.btn-primary(type='submit') !
+        button#nChooseR.btn.btn-primary(type='submit') $ \binom{n}{r}$
+        button#fraction.btn.btn-primary(type='submit') $\frac{x}{y}$
+        button#squareRoot.btn.btn-primary(type='submit') $\sqrt{x}$
+        button#summation.btn.btn-primary(type='submit') $\displaystyle\sum_{r=1}^{n}$
+        button#integrationDefinite.btn.btn-primary(type='submit') $\int_0^1 f(x)\,\mathrm{d}x$
+        button#integration.btn.btn-primary(type='submit') $\int f(x)\,\mathrm{d}x$
+        button#modulus.btn.btn-primary(type='submit') $| x |$
+        button#dydx.btn.btn-primary(type='submit') $\frac{\mathrm dy}{\mathrm d x}$
+        button#dSpacedx.btn.btn-primary(type='submit') $\frac{\mathrm d}{\mathrm d x}\left( f(x) \right)$
+        button#setReal.btn.btn-primary(type='submit') $\mathbb{R}$
+        button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
+        button#forAll.btn.btn-primary(type='submit') $\forall$
+        button#belongTo.btn.btn-primary(type='submit') $\in$
+        
+  button#submitAnswer.btn.btn-primary(type='submit') Submit
+  button#saveQuestion.btn.btn-primary(type='submit') Save As Draft
