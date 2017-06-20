@@ -6,10 +6,21 @@ block content
       i.fa.fa-picture-o
       | 1v1 Competition
     p Below are some questions set for you to use for Competition. Select them to start or choose your own questions below
+  #activeUserBox.modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4#promptMessageTitle.modal-title Success
+        #promptMessage.modal-body
+          | Post Successful
+        .modal-footer
+          button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary.invite(type='button', data-dismiss='modal') Invite
   .row#presetQuestions
       .col-sm-3
-        form
-          button#Proportions.btn.btn-default(type='submit')
+          #Proportions
             p Proportions
       .col-sm-3
         form

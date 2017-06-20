@@ -1,5 +1,37 @@
 $(document).ready(function() {
 
+  function showUsersSelected(whichUserName,whichUserArrayPosition){
+    if($('.separator').length==0){
+      $('#promptMessage').append($('<div style="height: 10px; border-bottom:2px solid black;"></div>').addClass('separator'));
+      $('#promptMessage').append($('<div style="margin-top: 10px;"></div>').html('Selected Users'));
+    }
+    var newUserSelected = $('<button style="margin-top: 10px;"></button>').html(whichUserName).data('selected', whichUserArrayPosition);
+    $('#promptMessage').append(newUserSelected);
+  }
+
+  function checkWhichButton(event){
+    if($(event.target).hasClass('close')){
+      $('#promptMessage').empty();
+      $('#activeUserBox').modal('hide');
+      $('#activeUserBox').removeClass('chooseUserBox');
+    }else if($(event.target).hasClass('invite')){
+
+    }else {
+      var whichUserArrayPosition = $(event.target).data().id;
+      var whichUserName = $(event.target).html();
+      socket.emit('user selected', $(event.target).data().id);
+      $(event.target).remove()
+      showUsersSelected(whichUserName,whichUserArrayPosition);
+    }
+  }
+
+  function showActiveUserBox(){
+    $('#activeUserBox').modal('show');
+    $('#activeUserBox').addClass('chooseUserBox');
+    $('#promptMessageTitle').html('Choose someone to compete with');
+    $('#promptMessage').html('');
+  }
+
   function postAnswerAjax(){
     var newAnswer = {};
     newAnswer.content = $('#Answer').val();
@@ -95,8 +127,43 @@ $(document).ready(function() {
   $('body').on('click', '#submitAnswer', function(){
     postAnswerAjax();
   })
-  // $('#questionPreview').on('click', 'button', function(event){
-  //   questionDetailsAjax(event);
-  // })
+  $('body').on('click', '#Proportions', function(e){
+    e.preventDefault();
+    socket.emit('check connected user');
+    showActiveUserBox();
+  })
+
+  $(document).on('click','.chooseUserBox button',function(event){
+    checkWhichButton(event);
+  })
+
+  socket = io.connect('/', {secure: true, transports: ['websocket']});
+
+  socket.on('boardcastUser', function(connectedUser){
+    console.log(connectedUser);
+    for(var i=0; i<connectedUser.length; i++){
+      var users = $('<button></button>').html(connectedUser[i].profile.name).data('id',i);
+      $('#promptMessage').append(users);
+    }
+  })
+
+
+
+
+
+
+  socket.on('broadcast message', function (data) {
+    console.log(data);
+
+    var msg = $('<div>').text(data);
+    $('#chat').append(msg);
+  });
+
+  $('#chat button').on('click', function(e){
+      e.preventDefault();
+      var message = $('#chat input').val();
+      socket.emit('newMessage', message);
+      $('#chat input').val('');
+  });
 
 });

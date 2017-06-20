@@ -17,10 +17,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
+const cookieParser = require('cookie-parser');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 const fs = require('fs');
-
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
@@ -76,16 +76,47 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
-app.use(session({
+
+const sessionStore = new MongoStore({
+  url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
+  autoReconnect: true,
+  clear_interval: 3600
+});
+
+const Session = session({
   resave: true,
   saveUninitialized: true,
-  secret: process.env.SESSION_SECRET,
-  store: new MongoStore({
-    url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
-    autoReconnect: true,
-    clear_interval: 3600
-  })
+  secret: "WDI-Singapore",
+  store: sessionStore,
+  cookieParser: cookieParser
+});
+
+app.use(Session);
+
+
+const passportSocketIo = require("passport.socketio");
+
+// function onAuthorizeSuccess(data, accept){
+//   console.log('successful connection to socket.io');
+//   // If you use socket.io@1.X the callback looks different
+//   accept();
+// }
+//
+// function onAuthorizeFail(data, message, error, accept){
+//   console.log('User not logged in @ socket.io');
+//   if(error)  throw new Error(message);
+//   return accept();
+// }
+
+io.use(passportSocketIo.authorize({
+  cookieParser: cookieParser,       // the same middleware you registrer in express
+  key:          'connect.sid',       // the name of the cookie where express/connect stores its session_id
+  secret:       "WDI-Singapore",    // the session_secret to parse the cookie
+  store:        sessionStore,
+  // success:      onAuthorizeSuccess,  // *optional* callback on success
+  // fail:         onAuthorizeFail,     // *optional* callback on fail/error
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -195,13 +226,14 @@ app.use(errorHandler());
 /*
 * Socket.io
 */
-const socket = require('./routes/websockets')(io);
+const socketIO = require('./routes/websockets')(io);
+
 require('./routes/main')(app);
 
 /**
  * Start Express server.
  */
-app.listen(app.get('port'), () => {
+ server.listen(app.get('port'), () => {
   console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env')); 
   console.log('  Press CTRL-C to stop\n');
 });
