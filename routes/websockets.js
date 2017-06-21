@@ -1,27 +1,33 @@
+const homeController = require('../controllers/home');
+const uuidV4 = require('uuid/v4');
+
 module.exports = (io) => {
 
   var unique = true;
-  var connectedUser = [];
+  var historyAllUser = [];
+  var neccessaryUserInfoFrontEnd = [];
 
   io.on('connection', (socket) => {
+    console.log('line 11', socket.request.user.profile.name);
+    socket.request.user.sid = socket.id
+    console.log('New user connected');
+    var currentUserFrontEnd = {
+      localid: socket.request.user._id,
+      name:socket.request.user.profile.name,
+      picture: socket.request.user.profile.picture,
+      sid: socket.id
+    }
 
-   console.log('New user connected');
-   connectedUser.forEach((elem,index,arr)=>{
-     if(elem._id==socket.request.user){
-        unique=false;
-        return;
-     }
-   })
+    neccessaryUserInfoFrontEnd.push(currentUserFrontEnd);
 
-  //  for(var i=0; i<connectedUser.length;i++){
-  //    if(connectedUser[i]._id==socket.request.user){
-  //      return unique=false;
-  //    }
-  //  }
-  if(unique==true){
-     connectedUser.push(socket.request.user);
-   }
+    if(typeof(historyAllUser[socket.request.user._id])=="undefined"){
+      historyAllUser[socket.request.user._id]=socket.request.user;
+    }
 
+
+   //}
+  //  console.log(connectedUser)
+  //  console.log(neccessaryUserInfoFrontEnd);
 
   //  connectedUser = connectedUser.filter( (elem,index,arr)=>{
   //    return elem._id!=socket.request.user._id;
@@ -33,24 +39,41 @@ module.exports = (io) => {
 
     socket.on('check connected user', ()=>{
       console.log('js connected');
-      io.emit('boardcastUser', connectedUser);
+      io.emit('boardcastUser', neccessaryUserInfoFrontEnd);
     });
 
-    // socket.on('user selected',(data)=>{
-    //   console.log(data);
-    // })
+    socket.on('invite user',(data)=>{
+      console.log('sending invite to selected user')
+      io.to(data).emit('private invite to compete',currentUserFrontEnd);
+    })
 
-    //
-    // socket.on('newUser', (data) => {
-    //   console.log('New User',data);
-    //   io.emit('broadcast location', data);
-    // });
+      if(typeof(historyAllUser[socket.request.user._id].room)!=="undefined"){
+        console.log('line 47: user is inside room ',socket.request.user.profile.name)
+        socket.join(historyAllUser[socket.request.user._id].room);
+        io.sockets.in(historyAllUser[socket.request.user._id].room).emit('user ready to compete');
+      }
+
+
+    socket.on('user accepted invite', (data)=>{
+      var roomName='competitionRoom'+uuidV4();
+      console.log(roomName)
+      socket.join(roomName);
+      historyAllUser[socket.request.user._id].room = roomName;
+
+      console.log(data)
+      console.log('socket recepted user invite');
+    })
+
+
 
     socket.on('disconnect', function(){
       console.log('user disconnected');
-      connectedUser = connectedUser.filter(function(element,index){
-        return element._id == socket.request.user._id;
-      });
+      // connectedUser = connectedUser.filter(function(element,index){
+      //   return element._id !== socket.request.user._id;
+      // });
+      neccessaryUserInfoFrontEnd = neccessaryUserInfoFrontEnd.filter(function(element,index){
+        return element.localid !== socket.request.user._id;
+      })
     })
 
 
@@ -68,5 +91,9 @@ module.exports = (io) => {
   //        gender: 'female',
   //        name: 'Geok Yan Pek' },
   //     tokens: [ [Object] ] } ]
+  // [ { localid: 594553e179ad1c72d771340a,
+  //   name: 'Geok Yan Pek',
+  //   picture: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50',
+  //   sid: 'toMMwxsxZOG5BMHYAAAA' } ]
 
 }

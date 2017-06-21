@@ -1,6 +1,6 @@
 .navbar.navbar-default.navbar-fixed-top
   .container
-    .navbar-header
+    .navbar-header.toCompete
       button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
         span.sr-only Toggle navigation
         span.icon-bar
@@ -22,6 +22,9 @@
         li
           a(href='/status') Status
       ul.nav.navbar-nav.navbar-right
+        if invitationTrigger
+          li(class=(title == 'Login') ? 'active' : undefined)
+            a(href='/startCompete') Competition Invite
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)
             a(href='/login') Login
@@ -46,3 +49,13 @@
               li.divider
               li
                 a(href='/logout') Logout
+script#DropDownScript(type='text/template').
+  <div class="dropdown">
+    <button id= 'invitations' class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      Invitations
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id='invitationList'>
+      <li><a href='/startCompetition' data-userthatInvitedYouId='{{userIDThatInvitedYou}}'>{{name}}</a></li>
+    </ul>
+  </div>

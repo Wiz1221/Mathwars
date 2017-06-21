@@ -3,6 +3,7 @@ const User = require('../models/User');
 
 exports.getArchive = (req, res)=>{
   Question.find({}, function(err,questions){
+    console.log(questions)
       res.render('pages/archive',{
         title: 'View Questions',
         questions

@@ -1,11 +1,29 @@
 $(document).ready(function() {
 
-  function showUsersSelected(whichUserName,whichUserArrayPosition){
+  var userThatInvitedYouArray = [];
+
+  function createInvitationList(currentUserThatInivitedYouFrontEnd){
+    console.log('invitation function works')
+    if($('#invitations').length==0){
+      var intivationDropDownScript = $('#DropDownScript').html();
+      intivationDropDownScript = intivationDropDownScript.replace('{{name}}',userThatInvitedYouArray[0].name);
+      intivationDropDownScript = intivationDropDownScript.replace('{{userIDThatInvitedYou}}',userThatInvitedYouArray[0].localid);
+
+      if($('[data-userthatInvitedYouId='+currentUserThatInivitedYouFrontEnd.localid+']').length==0){
+          var anotherUserInvite = $('<li></li>').attr('data-userthatInvitedYouId', currentUserThatInivitedYouFrontEnd.localid).html(currentUserThatInivitedYouFrontEnd.name);
+          $('#invitationList').append(anotherUserInvite)
+      }
+
+      $('.toCompete').append(intivationDropDownScript);
+    }
+  }
+
+  function showUsersSelected(whichUserName,whichUserSID){
     if($('.separator').length==0){
       $('#promptMessage').append($('<div style="height: 10px; border-bottom:2px solid black;"></div>').addClass('separator'));
       $('#promptMessage').append($('<div style="margin-top: 10px;"></div>').html('Selected Users'));
     }
-    var newUserSelected = $('<button style="margin-top: 10px;"></button>').html(whichUserName).data('selected', whichUserArrayPosition);
+    var newUserSelected = $('<button style="margin-top: 10px;"></button>').html(whichUserName).data('selected', whichUserSID).addClass('selected');
     $('#promptMessage').append(newUserSelected);
   }
 
@@ -15,13 +33,12 @@ $(document).ready(function() {
       $('#activeUserBox').modal('hide');
       $('#activeUserBox').removeClass('chooseUserBox');
     }else if($(event.target).hasClass('invite')){
-
+      socket.emit('invite user',$('.selected').data().selected);
     }else {
-      var whichUserArrayPosition = $(event.target).data().id;
+      var whichUserSID = $(event.target).data().sid;
       var whichUserName = $(event.target).html();
-      socket.emit('user selected', $(event.target).data().id);
       $(event.target).remove()
-      showUsersSelected(whichUserName,whichUserArrayPosition);
+      showUsersSelected(whichUserName,whichUserSID);
     }
   }
 
@@ -128,7 +145,7 @@ $(document).ready(function() {
     postAnswerAjax();
   })
   $('body').on('click', '#Proportions', function(e){
-    e.preventDefault();
+    //e.preventDefault();
     socket.emit('check connected user');
     showActiveUserBox();
   })
@@ -137,33 +154,24 @@ $(document).ready(function() {
     checkWhichButton(event);
   })
 
+  $(document).on('click','#invitationList a', function(event){
+    socket.emit('user accepted invite',$(event.target).data());
+  })
+
   socket = io.connect('/', {secure: true, transports: ['websocket']});
 
-  socket.on('boardcastUser', function(connectedUser){
-    console.log(connectedUser);
-    for(var i=0; i<connectedUser.length; i++){
-      var users = $('<button></button>').html(connectedUser[i].profile.name).data('id',i);
-      $('#promptMessage').append(users);
+  socket.on('boardcastUser', function(neccessaryUserInfoFrontEnd){
+    for(var i=0; i<neccessaryUserInfoFrontEnd.length; i++){
+      if($('[data-sid='+neccessaryUserInfoFrontEnd[i].sid+']').length==0){
+        var users = $('<button></button>').html(neccessaryUserInfoFrontEnd[i].name).attr('data-sid',neccessaryUserInfoFrontEnd[i].sid).data('sid',neccessaryUserInfoFrontEnd[i].sid);
+        $('#promptMessage').append(users);
+      }
     }
   })
 
-
-
-
-
-
-  socket.on('broadcast message', function (data) {
-    console.log(data);
-
-    var msg = $('<div>').text(data);
-    $('#chat').append(msg);
-  });
-
-  $('#chat button').on('click', function(e){
-      e.preventDefault();
-      var message = $('#chat input').val();
-      socket.emit('newMessage', message);
-      $('#chat input').val('');
-  });
+  socket.on('private invite to compete', function(currentUserThatInivitedYouFrontEnd) {
+    userThatInvitedYouArray.push(currentUserThatInivitedYouFrontEnd);
+    createInvitationList(currentUserThatInivitedYouFrontEnd);
+  })
 
 });

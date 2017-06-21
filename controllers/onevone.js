@@ -9,3 +9,15 @@ exports.getOneVOne = (req, res)=>{
         });
   });
 }
+
+exports.renderCompetitionPage = (req, res)=>{
+  res.render('extension/startCompetition',{
+    title: 'It\'s War!',
+  });
+}
+
+exports.getCompetitionQuestions = (req, res)=>{
+  Question.find({}, function(err,questions){
+        res.send(['try']);
+  });
+}

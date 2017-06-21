@@ -21,6 +21,7 @@ const cookieParser = require('cookie-parser');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 const fs = require('fs');
+const passportSocketIo = require("passport.socketio");
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 /**
@@ -28,12 +29,8 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
  */
 dotenv.load({ path: '.env.example' });
 
-/**
- * Controllers (route handlers).
- */
-const homeController = require('./controllers/home');
-const userController = require('./controllers/user');
-const contactController = require('./controllers/contact');
+
+
 
 /**
  * API keys and Passport configuration.
@@ -93,21 +90,6 @@ const Session = session({
 
 app.use(Session);
 
-
-const passportSocketIo = require("passport.socketio");
-
-// function onAuthorizeSuccess(data, accept){
-//   console.log('successful connection to socket.io');
-//   // If you use socket.io@1.X the callback looks different
-//   accept();
-// }
-//
-// function onAuthorizeFail(data, message, error, accept){
-//   console.log('User not logged in @ socket.io');
-//   if(error)  throw new Error(message);
-//   return accept();
-// }
-
 io.use(passportSocketIo.authorize({
   cookieParser: cookieParser,       // the same middleware you registrer in express
   key:          'connect.sid',       // the name of the cookie where express/connect stores its session_id
@@ -116,6 +98,18 @@ io.use(passportSocketIo.authorize({
   // success:      onAuthorizeSuccess,  // *optional* callback on success
   // fail:         onAuthorizeFail,     // *optional* callback on fail/error
 }));
+
+/*
+* Socket.io
+*/
+const socketIO = require('./routes/websockets')(io);
+/**
+ * Controllers (route handlers).
+ */
+const homeController = require('./controllers/home');
+const userController = require('./controllers/user');
+const contactController = require('./controllers/contact');
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -223,12 +217,11 @@ app.get('/auth/pinterest/callback', passport.authorize('pinterest', { failureRed
  */
 app.use(errorHandler());
 
-/*
-* Socket.io
-*/
-const socketIO = require('./routes/websockets')(io);
 
-require('./routes/main')(app);
+
+
+
+require('./routes/main')(app,io);
 
 /**
  * Start Express server.
