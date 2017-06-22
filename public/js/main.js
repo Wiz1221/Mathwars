@@ -158,6 +158,7 @@ $(document).ready(function() {
     socket.emit('user accepted invite',$(event.target).data());
   })
 
+
   socket = io.connect('/', {secure: true, transports: ['websocket']});
 
   socket.on('boardcastUser', function(neccessaryUserInfoFrontEnd){
@@ -172,6 +173,18 @@ $(document).ready(function() {
   socket.on('private invite to compete', function(currentUserThatInivitedYouFrontEnd) {
     userThatInvitedYouArray.push(currentUserThatInivitedYouFrontEnd);
     createInvitationList(currentUserThatInivitedYouFrontEnd);
+  })
+
+  socket.on('user have accepted invite, join also',function(whoAcceptedYourInvite, id,room){
+    $('#editform').modal('show');
+    $('#editform').addClass('acceptBox');
+    $(document).on('click','.acceptBox .accept', function(event){
+
+      socket.emit('user that sent invite goes into room', {
+        id: id,
+        room: room
+      });
+    })
   })
 
 });

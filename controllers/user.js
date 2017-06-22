@@ -106,6 +106,7 @@ exports.postSignup = (req, res, next) => {
         res.redirect('/');
       });
     });
+
   });
 };
 
@@ -287,7 +288,7 @@ exports.postReset = (req, res, next) => {
     };
     return transporter.sendMail(mailOptions)
       .then(() => {
-        req.flash('success', { msg: 'Success! Your password has been changed.' });    
+        req.flash('success', { msg: 'Success! Your password has been changed.' });
       });
   };
 

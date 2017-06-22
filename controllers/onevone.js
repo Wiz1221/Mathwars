@@ -1,5 +1,16 @@
 const Question = require('../models/questionDB');
 const User = require('../models/User');
+var noOfQuestion = 2;
+
+function chooseRandomQuestion(length){
+  var array = [];
+  while (array.length<=noOfQuestion){
+    var questionNumber = Math.Floor(Math.Random()*length);
+    if(array.indexOf(questionNumber) > -1){continue;}
+    array.push(questionNumber);
+  }
+  return array;
+}
 
 exports.getOneVOne = (req, res)=>{
   Question.find({}, function(err,questions){
@@ -18,6 +29,11 @@ exports.renderCompetitionPage = (req, res)=>{
 
 exports.getCompetitionQuestions = (req, res)=>{
   Question.find({}, function(err,questions){
-        res.send(['try']);
+    var questionToSend = [];
+    var questionOrder = chooseRandomQuestion(questions.length);
+    questionOrder.forEach(function(elem,index,arr){
+      questionToSend.push(questions[elem]);
+    })
+    res.send(questionToSend);
   });
 }

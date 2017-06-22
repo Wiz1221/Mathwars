@@ -12,12 +12,25 @@ block content
         .modal-header
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
-          h4#promptMessageTitle.modal-title Success
+          h4#promptMessageTitle.modal-title Invite a Friend
         #promptMessage.modal-body
-          | Post Successful
+          | 
         .modal-footer
           button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
           button.btn.btn-primary.invite(type='button', data-dismiss='modal') Invite
+  #editform.modal.fade(tabindex='-1', role='dialog')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4.promptMessageTitle.modal-title Start Competition?
+        .promptMessage.modal-body
+          | Your friend have accepted your invite. Start Competition Now?
+        .modal-footer
+          form(action='/startCompetition')
+            button.btn.btn-primary.accept(type='button',data-dismiss='modal') Start
+          button.btn.btn-primary.close(type='button', data-dismiss='modal') Ignore
   .row#presetQuestions
       .col-sm-3
           #Proportions

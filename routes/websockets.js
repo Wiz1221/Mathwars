@@ -1,16 +1,21 @@
 const homeController = require('../controllers/home');
 const uuidV4 = require('uuid/v4');
 
+var unique = true;
+var historyAllUser = [];
+var neccessaryUserInfoFrontEnd = [];
+var connectedUser = [];
+
 module.exports = (io) => {
 
-  var unique = true;
-  var historyAllUser = [];
-  var neccessaryUserInfoFrontEnd = [];
-
   io.on('connection', (socket) => {
-    console.log('line 11', socket.request.user.profile.name);
+
+
+
+
+    //console.log('line 11', socket.request.user.profile.name);
     socket.request.user.sid = socket.id
-    console.log('New user connected');
+    //console.log('New user connected');
     var currentUserFrontEnd = {
       localid: socket.request.user._id,
       name:socket.request.user.profile.name,
@@ -21,9 +26,18 @@ module.exports = (io) => {
     neccessaryUserInfoFrontEnd.push(currentUserFrontEnd);
 
     if(typeof(historyAllUser[socket.request.user._id])=="undefined"){
-      historyAllUser[socket.request.user._id]=socket.request.user;
+      historyAllUser[socket.request.user._id] = socket.request.user;
     }
 
+    connectedUser[socket.request.user._id] = socket.request.user;
+    connectedUser[socket.request.user._id].socketID = socket.id;
+
+    // console.log('line 30',connectedUser[socket.request.user._id].socketID)
+    //console.log('socket id for new user',socket.id)
+    connectedUser[socket.request.user._id].save((err) => {
+      if (err) return err
+      // console.log(connectedUser[socket.request.user._id])
+    })
 
    //}
   //  console.log(connectedUser)
@@ -32,10 +46,6 @@ module.exports = (io) => {
   //  connectedUser = connectedUser.filter( (elem,index,arr)=>{
   //    return elem._id!=socket.request.user._id;
   //  })
-    socket.on('newMessage', (data) => {
-      console.log('New message',data);
-      io.emit('broadcast message', data);
-    });
 
     socket.on('check connected user', ()=>{
       console.log('js connected');
@@ -48,7 +58,6 @@ module.exports = (io) => {
     })
 
       if(typeof(historyAllUser[socket.request.user._id].room)!=="undefined"){
-        console.log('line 47: user is inside room ',socket.request.user.profile.name)
         socket.join(historyAllUser[socket.request.user._id].room);
         io.sockets.in(historyAllUser[socket.request.user._id].room).emit('user ready to compete');
       }
@@ -56,21 +65,51 @@ module.exports = (io) => {
 
     socket.on('user accepted invite', (data)=>{
       var roomName='competitionRoom'+uuidV4();
-      console.log(roomName)
+      console.log(roomName);
       socket.join(roomName);
       historyAllUser[socket.request.user._id].room = roomName;
+      historyAllUser[data.userthatinvitedyouid].room = roomName;
 
+      if(typeof(connectedUser[data.userthatinvitedyouid])!=='undefined'){
+        io.to(connectedUser[data.userthatinvitedyouid].socketID).emit('user have accepted invite, join also',{
+          name: socket.request.user.profile.name,
+          id: socket.request.user._id,
+          room: roomName
+        });
+      }
       console.log(data)
       console.log('socket recepted user invite');
     })
 
+    socket.on('user that sent invite goes into room', (info)=>{
+        console.log('proceed to questions')
+        console.log(info.room);
+        io.sockets.in(info.room).emit('start first question',info.room);
+    });
+
+    socket.on('question 1 correct', ()=>{
+        console.log('line 75 question 1 correct');
+        io.sockets.in(room).boardcast.emit('boardcast question 1 correct',socket.request.user.profile.name);
+        socket.emit('start question 2');
+    });
+
+    socket.on('question 2 correct', ()=>{
+        console.log('line 75 question 2 correct');
+        io.sockets.in(room).boardcast.emit('lose');
+        socket.emit('win');
+    });
+
+    socket.on('leave room', ()=>{
+      delete historyAllUser[socket.request.user._id].room;
+      socket.emit('redirect');
+    })
 
 
     socket.on('disconnect', function(){
-      console.log('user disconnected');
-      // connectedUser = connectedUser.filter(function(element,index){
-      //   return element._id !== socket.request.user._id;
-      // });
+      console.log('user disconnected', socket.request.user.profile.name);
+      connectedUser = connectedUser.filter(function(element,index){
+        return element._id !== socket.request.user._id;
+      });
       neccessaryUserInfoFrontEnd = neccessaryUserInfoFrontEnd.filter(function(element,index){
         return element.localid !== socket.request.user._id;
       })

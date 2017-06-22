@@ -4,34 +4,30 @@ block content
   .page-header
     h2 WAR IS NOW
   
-    p.default if you are seeing this right now, then you haven't been invited to join a Competition
-    p.default Invite someone or accept an invitation now!
+    p.default 
+      | if you are seeing this right now, then you haven't been invited to join a Competition.
+      | Invite someone or accept an invitation now!
+    #editform.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+            h4#promptMessageTitle.modal-title Success
+          #promptMessage.modal-body
+            | Post Successful
+          .modal-footer
+            button.btn.btn-primary.close(type='button', data-dismiss='modal') Leave
     
     #domToAppear
       
   script#WarDOM(type='text/template').
     <div class="countDown" style="text-align:center;">10:00</div>
+    <p id='broadcastMessage' style='font:40px;'></p>
     <div id='{{questionID}}'>{{question}}</div>
-    <div class="funkyradio">
-      <div class="funkyradio-success">
-          <input type="radio" name="radio" id="radio1" />
-          <label for="radio1">First Option default</label>
-      </div>
-      <div class="funkyradio-success">
-          <input type="radio" name="radio" id="radio2" checked/>
-          <label for="radio2">Second Option primary</label>
-      </div>
-      <div class="funkyradio-success">
-          <input type="radio" name="radio" id="radio3" />
-          <label for="radio3">Third Option success</label>
-      </div>
-      <div class="funkyradio-success">
-          <input type="radio" name="radio" id="radio4" />
-          <label for="radio4">Fourth Option danger</label>
-      </div>
-    </div>
     <form>
-      <button type="submit" class="btn btn-default" style="margin-top:30px;">Submit</button>
+      <textarea id='Answer' class='form-control' type='number' placeholder='type your answer here'></textarea>
+      <button id='submitFinalAns' type="submit" class="btn btn-default" style="margin-top:30px;">Submit Final Answer</button>
     </form>
 block scripts
   script(src='/js/onevonePublic.js')
