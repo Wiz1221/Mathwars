@@ -179,7 +179,7 @@ $(document).ready(function() {
     $('#editform').modal('show');
     $('#editform').addClass('acceptBox');
     $(document).on('click','.acceptBox .accept', function(event){
-
+      c
       socket.emit('user that sent invite goes into room', {
         id: id,
         room: room
