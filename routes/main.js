@@ -12,6 +12,6 @@ module.exports = function(app,io){
   app.get('/questionDetails/updateByUser/:id', archiveController.getQuestionDetailsToUpdate);
   app.get('/1v1', onevoneController.getOneVOne);
   app.get('/startCompetition', onevoneController.renderCompetitionPage);
-  app.post('/startCompetition', onevoneController.getCompetitionQuestions);
+  app.get('/getquestions', onevoneController.getCompetitionQuestions)
 
 }

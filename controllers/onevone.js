@@ -5,7 +5,7 @@ var noOfQuestion = 2;
 function chooseRandomQuestion(length){
   var array = [];
   while (array.length<=noOfQuestion){
-    var questionNumber = Math.Floor(Math.Random()*length);
+    var questionNumber = Math.floor(Math.random()*length);
     if(array.indexOf(questionNumber) > -1){continue;}
     array.push(questionNumber);
   }
@@ -28,12 +28,15 @@ exports.renderCompetitionPage = (req, res)=>{
 }
 
 exports.getCompetitionQuestions = (req, res)=>{
+  console.log('controller working')
+  //res.json(['1','2']);
   Question.find({}, function(err,questions){
-    var questionToSend = [];
-    var questionOrder = chooseRandomQuestion(questions.length);
-    questionOrder.forEach(function(elem,index,arr){
-      questionToSend.push(questions[elem]);
-    })
-    res.send(questionToSend);
+
+    // var questionToSend = [];
+    // var questionOrder = chooseRandomQuestion(questions.length);
+    // questionOrder.forEach(function(elem,index,arr){
+    //   questionToSend.push(questions[elem]);
+    // })
+   res.json(questions);
   });
 }

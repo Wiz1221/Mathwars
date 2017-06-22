@@ -10,12 +10,7 @@ module.exports = (io) => {
 
   io.on('connection', (socket) => {
 
-
-
-
-    //console.log('line 11', socket.request.user.profile.name);
     socket.request.user.sid = socket.id
-    //console.log('New user connected');
     var currentUserFrontEnd = {
       localid: socket.request.user._id,
       name:socket.request.user.profile.name,
@@ -32,20 +27,9 @@ module.exports = (io) => {
     connectedUser[socket.request.user._id] = socket.request.user;
     connectedUser[socket.request.user._id].socketID = socket.id;
 
-    // console.log('line 30',connectedUser[socket.request.user._id].socketID)
-    //console.log('socket id for new user',socket.id)
     connectedUser[socket.request.user._id].save((err) => {
       if (err) return err
-      // console.log(connectedUser[socket.request.user._id])
     })
-
-   //}
-  //  console.log(connectedUser)
-  //  console.log(neccessaryUserInfoFrontEnd);
-
-  //  connectedUser = connectedUser.filter( (elem,index,arr)=>{
-  //    return elem._id!=socket.request.user._id;
-  //  })
 
     socket.on('check connected user', ()=>{
       console.log('js connected');
@@ -54,38 +38,30 @@ module.exports = (io) => {
 
     socket.on('invite user',(data)=>{
       console.log('sending invite to selected user')
-      io.to(data).emit('private invite to compete',currentUserFrontEnd);
+      var roomName='competitionRoom'+uuidV4();
+      socket.join(roomName);
+      // historyAllUser[socket.request.user._id].room = roomName;
+      io.sockets.in(roomName).emit('user ready to compete');
+      io.to(data).emit('private invite to compete',{
+        current user: currentUserFrontEnd,
+        room: roomName
+      });
     })
 
-      if(typeof(historyAllUser[socket.request.user._id].room)!=="undefined"){
-        socket.join(historyAllUser[socket.request.user._id].room);
-        io.sockets.in(historyAllUser[socket.request.user._id].room).emit('user ready to compete');
-      }
+      // if(typeof(historyAllUser[socket.request.user._id].room)!=="undefined"){
+      //   socket.join(historyAllUser[socket.request.user._id].room);
+      //   io.sockets.in(historyAllUser[socket.request.user._id].room).emit('start first question',historyAllUser[socket.request.user._id].room);
+      //   //io.sockets.in(historyAllUser[socket.request.user._id].room).emit('user ready to compete');
+      // }
 
 
     socket.on('user accepted invite', (data)=>{
-      var roomName='competitionRoom'+uuidV4();
-      console.log(roomName);
-      socket.join(roomName);
-      historyAllUser[socket.request.user._id].room = roomName;
-      historyAllUser[data.userthatinvitedyouid].room = roomName;
-
-      if(typeof(connectedUser[data.userthatinvitedyouid])!=='undefined'){
-        io.to(connectedUser[data.userthatinvitedyouid].socketID).emit('user have accepted invite, join also',{
-          name: socket.request.user.profile.name,
-          id: socket.request.user._id,
-          room: roomName
-        });
-      }
-      console.log(data)
-      console.log('socket recepted user invite');
+      console.log('user accepted invite');
+      acceptInvite = true;
+      historyAllUser[socket.request.user._id].room = historyAllUser[data.userthatinvitedyouid].room;
+      socket.join(historyAllUser[socket.request.user._id].room);
+      io.sockets.in(historyAllUser[socket.request.user._id].room).emit('start first question',historyAllUser[socket.request.user._id].room);
     })
-
-    socket.on('user that sent invite goes into room', (info)=>{
-        console.log('proceed to questions')
-        console.log(info.room);
-        io.sockets.in(info.room).emit('start first question',info.room);
-    });
 
     socket.on('question 1 correct', ()=>{
         console.log('line 75 question 1 correct');

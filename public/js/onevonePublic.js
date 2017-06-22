@@ -16,23 +16,27 @@ $(document).ready(function() {
 
     socket.on('user ready to compete', function(){
       console.log('socket have wroked')
-      $('.default').html('');
-      $('.default').html('waiting for the other user');
-
+      $('#Wrapper').empty();
+      $('#Wrapper').append($('<h2></h2>').html('War Is Now'));
+      $('#Wrapper').append($('<p></p>').html('waiting for the other user'));
     })
 
-    socket.on('start first question', function(room){
+    socket.once('start first question', function(room){
+      $('.default').html('');
+      console.log('start first question')
        var roomNumber = room;
       $.ajax({
-        method: 'POST',
-        url: '/startCompetition',
-        data: 'one'
+        method: 'GET',
+        url: '/getquestions'
       }).done(function(data){
         console.log(data);
         questions = data;
+        var warDom = $('#warDom').html();
         warDom = warDom.replace('{{questionID}}','question1');
         warDom = warDom.replace('{{question}}',questions[0].question.content);
+        $('#domToAppear').append(warDom);
       });
+
         $(document).on('click','#submitFinalAns',function(){
           if($('#Answer').val()==questions[0].answer[0].content){
             if($('.wrongAnsPrompt').length>0){
@@ -50,7 +54,9 @@ $(document).ready(function() {
     })
 
     socket.on('start question 2', function(){
+      console.log('start question 2');
       $('#domToAppear').empty();
+      var warDom = $('#arDom').html();
       warDom = warDom.replace('{{questionID}}','question2');
       warDom = warDom.replace('{{question}}',questions[1].question.content);
       $('#domToAppear').append(warDom);

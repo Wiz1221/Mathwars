@@ -49,7 +49,8 @@ const passportConfig = require('./config/passport');
  * Connect to MongoDB.
  */
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+mongoose.connect('mongodb://localhost/mathwarslocal')
+  //process.env.MONGODB_URI || process.env.MONGOLAB_URI);
   // process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);

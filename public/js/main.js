@@ -2,12 +2,12 @@ $(document).ready(function() {
 
   var userThatInvitedYouArray = [];
 
-  function createInvitationList(currentUserThatInivitedYouFrontEnd){
+  function createInvitationList(data){
     console.log('invitation function works')
     if($('#invitations').length==0){
       var intivationDropDownScript = $('#DropDownScript').html();
-      intivationDropDownScript = intivationDropDownScript.replace('{{name}}',userThatInvitedYouArray[0].name);
-      intivationDropDownScript = intivationDropDownScript.replace('{{userIDThatInvitedYou}}',userThatInvitedYouArray[0].localid);
+      intivationDropDownScript = intivationDropDownScript.replace('{{name}}',data.user.name);
+      intivationDropDownScript = intivationDropDownScript.replace('{{userIDThatInvitedYou}}',data.user.name);
 
       if($('[data-userthatInvitedYouId='+currentUserThatInivitedYouFrontEnd.localid+']').length==0){
           var anotherUserInvite = $('<li></li>').attr('data-userthatInvitedYouId', currentUserThatInivitedYouFrontEnd.localid).html(currentUserThatInivitedYouFrontEnd.name);
@@ -33,7 +33,7 @@ $(document).ready(function() {
       $('#activeUserBox').modal('hide');
       $('#activeUserBox').removeClass('chooseUserBox');
     }else if($(event.target).hasClass('invite')){
-      socket.emit('invite user',$('.selected').data().selected);
+
     }else {
       var whichUserSID = $(event.target).data().sid;
       var whichUserName = $(event.target).html();
@@ -153,6 +153,10 @@ $(document).ready(function() {
   $(document).on('click','.chooseUserBox button',function(event){
     checkWhichButton(event);
   })
+  $(document).on('click','.chooseUserBox a',function(event){
+    console.log('invite works')
+    socket.emit('invite user',$('.selected').data().selected);
+  })
 
   $(document).on('click','#invitationList a', function(event){
     socket.emit('user accepted invite',$(event.target).data());
@@ -170,21 +174,21 @@ $(document).ready(function() {
     }
   })
 
-  socket.on('private invite to compete', function(currentUserThatInivitedYouFrontEnd) {
-    userThatInvitedYouArray.push(currentUserThatInivitedYouFrontEnd);
-    createInvitationList(currentUserThatInivitedYouFrontEnd);
+  socket.on('private invite to compete', function(data) {
+    userThatInvitedYouArray.push(data.user);
+    createInvitationList(data);
   })
 
-  socket.on('user have accepted invite, join also',function(whoAcceptedYourInvite, id,room){
-    $('#editform').modal('show');
-    $('#editform').addClass('acceptBox');
-    $(document).on('click','.acceptBox .accept', function(event){
-      c
-      socket.emit('user that sent invite goes into room', {
-        id: id,
-        room: room
-      });
-    })
-  })
+  // socket.on('user have accepted invite, join also',function(whoAcceptedYourInvite, id,room){
+  //   $('#editform').modal('show');
+  //   $('#editform').addClass('acceptBox');
+  //   $(document).on('click','.acceptBox .accept', function(event){
+  //     console.log('button clicked')
+  //     socket.emit('user that sent invite goes into room', {
+  //       id: id,
+  //       room: room
+  //     });
+  //   })
+  // })
 
 });

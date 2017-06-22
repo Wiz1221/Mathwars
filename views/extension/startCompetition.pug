@@ -18,10 +18,8 @@ block content
             | Post Successful
           .modal-footer
             button.btn.btn-primary.close(type='button', data-dismiss='modal') Leave
-    
-    #domToAppear
-      
-  script#WarDOM(type='text/template').
+    #domToAppear  
+  script#warDom(type='text/template').
     <div class="countDown" style="text-align:center;">10:00</div>
     <p id='broadcastMessage' style='font:40px;'></p>
     <div id='{{questionID}}'>{{question}}</div>

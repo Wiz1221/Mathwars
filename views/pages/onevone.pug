@@ -1,57 +1,53 @@
 extends ../layout
 
 block content
-  .page-header
-    h2
-      i.fa.fa-picture-o
-      | 1v1 Competition
-    p Below are some questions set for you to use for Competition. Select them to start or choose your own questions below
-  #activeUserBox.modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') ×
-          h4#promptMessageTitle.modal-title Invite a Friend
-        #promptMessage.modal-body
-          | 
-        .modal-footer
-          button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary.invite(type='button', data-dismiss='modal') Invite
-  #editform.modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') ×
-          h4.promptMessageTitle.modal-title Start Competition?
-        .promptMessage.modal-body
-          | Your friend have accepted your invite. Start Competition Now?
-        .modal-footer
-          form(action='/startCompetition')
-            button.btn.btn-primary.accept(type='button',data-dismiss='modal') Start
-          button.btn.btn-primary.close(type='button', data-dismiss='modal') Ignore
-  .row#presetQuestions
-      .col-sm-3
-          #Proportions
-            button Proportions
-      .col-sm-3
-        form
-          button#Integration.btn.btn-default(type='submit')
-            p Integration
-      .col-sm-3
-        form
-          button#Vectors.btn.btn-default(type='submit')
-            p Vectors
-      .col-sm-3
-        form
-          button#ComplexNumbers.btn.btn-default(type='submit')
-            p Complex Numbers
-  .row#questionPreview
-    h4 Choose Questions
-    each question in questions
-      .col-sm-3
-        form(name=question._id, method='get')
-          button.btn.btn-default(name=id value=question._id,type='button')
-            p= question.question.content
-            p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+  #Wrapper
+    .page-header
+      h2 1v1 Competition
+      p Below are some questions set for you to use for Competition. Select them to start or choose your own questions below
+    #activeUserBox.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+            h4#promptMessageTitle.modal-title Invite a Friend
+          #promptMessage.modal-body
+            | 
+          .modal-footer
+            a.btn.btn-primary.invite(href='/startCompetition') Start Competition
+            button.btn.btn-primary.close(type='button', data-dismiss='modal') Close    
+    .row#presetQuestions
+        .col-sm-3
+            #Proportions
+              button Proportions
+        .col-sm-3
+          form
+            button#Integration.btn.btn-default(type='submit')
+              p Integration
+        .col-sm-3
+          form
+            button#Vectors.btn.btn-default(type='submit')
+              p Vectors
+        .col-sm-3
+          form
+            button#ComplexNumbers.btn.btn-default(type='submit')
+              p Complex Numbers
+    .row#questionPreview
+      h4 Choose Questions
+      each question in questions
+        .col-sm-3
+          form(name=question._id, method='get')
+            button.btn.btn-default(name=id value=question._id,type='button')
+              p= question.question.content
+              p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+  script#warDom(type='text/template').
+    <div class="countDown" style="text-align:center;">10:00</div>
+    <p id='broadcastMessage' style='font:40px;'></p>
+    <div id='{{questionID}}'>{{question}}</div>
+    <form>
+      <textarea id='Answer' class='form-control' type='number' placeholder='type your answer here'></textarea>
+      <button id='submitFinalAns' type="submit" class="btn btn-default" style="margin-top:30px;">Submit Final Answer</button>
+    </form>
+block scripts
+  script(src='/js/onevonePublic.js')
