@@ -20,6 +20,8 @@ block content
       .col-sm-7
         h4 Question
         each question in questions
+          p='title: ' + question.question.title
+          p='topic: ' + question.question.topic
           p#getQuestionId(data-id=question._id)= question.question.content
           p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
   .row
@@ -34,9 +36,11 @@ block content
               p= answer.content
               p= 'created by'+' '+ answer.answeredBy.name
               p= 'created on'+" "+ answer._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+
   .row
     .col-sm-7
-      h4 Post an answer
+      button#deleteAnswer.btn.btn-primary(type='submit') Delete My Answer
+      h4 Update your answer
       #inputAnswerWrapper.input-group
           textarea#Answer.wmd-input.processed.form-control(type='text', placeholder='type your question here')
     .col-sm-5
@@ -63,6 +67,4 @@ block content
         button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
         button#forAll.btn.btn-primary(type='submit') $\forall$
         button#belongTo.btn.btn-primary(type='submit') $\in$
-        
-  button#submitAnswer.btn.btn-primary(type='submit') Submit
-  button#saveQuestion.btn.btn-primary(type='submit') Save As Draft
+  button#updateAnswer.btn.btn-primary(type='submit') Submit

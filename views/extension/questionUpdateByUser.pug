@@ -20,6 +20,8 @@ block content
       .col-sm-7
         h4 Question
         each question in questions
+          p='title: ' + question.question.title
+          p='topic: ' + question.question.topic
           p#getQuestionId(data-id=question._id)= question.question.content
           p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
   .row
@@ -36,11 +38,21 @@ block content
               p= 'created on'+" "+ answer._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
   .row
     .col-sm-7
+      button#deleteQuestion.btn.btn-primary(type='submit') Delete This Question
       h4 Update Question
+      form.form-horizontal
+        .form-group
+          label.col-sm-2.control-label(for='questionTitle') Title
+          .col-sm-10
+            input#Title.form-control(type='text', placeholder='Title')
+        .form-group
+          label.col-sm-2.control-label(for='questionTopic') Topic
+          .col-sm-10
+            input#Topic.form-control(type='text', placeholder='example: Integration')
       #inputQuestionWrapper.input-group
-          textarea#Question.wmd-input.processed.form-control(type='text', placeholder='type your question here')
+          textarea#wmd-input.processed.form-control(type='text', placeholder='type your question here')
     .col-sm-5
-      #mathSymbolWrapper
+      #mathSymbolWrapperQuestion
         button#theta.btn.btn-primary(type='submit') $\theta$
         button#cosine.btn.btn-primary(type='submit') $\cos$
         button#sine.btn.btn-primary(type='submit') $\sin$
@@ -63,10 +75,35 @@ block content
         button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
         button#forAll.btn.btn-primary(type='submit') $\forall$
         button#belongTo.btn.btn-primary(type='submit') $\in$
-  button#submitQuestion.btn.btn-primary(type='submit') Submit
+  button#updateQuestion.btn.btn-primary(type='submit') Submit
   .row
     .col-sm-7
-      h4 Post or update your answer
+      h4 Post an answer
       #inputAnswerWrapper.input-group
           textarea#Answer.wmd-input.processed.form-control(type='text', placeholder='type your question here')
-  button#submitAnswer.btn.btn-primary(type='submit') Submit
+    .col-sm-5
+      #mathSymbolWrapperAnswer
+        button#theta.btn.btn-primary(type='submit') $\theta$
+        button#cosine.btn.btn-primary(type='submit') $\cos$
+        button#sine.btn.btn-primary(type='submit') $\sin$
+        button#pi.btn.btn-primary(type='submit') $\pi$
+        button#alpha.btn.btn-primary(type='submit') $\alpha$
+        button#beta.btn.btn-primary(type='submit') $\beta$
+        button#mu.btn.btn-primary(type='submit') $\mu$
+        button#power.btn.btn-primary(type='submit') $x^{n}$
+        button#vectorial.btn.btn-primary(type='submit') !
+        button#nChooseR.btn.btn-primary(type='submit') $ \binom{n}{r}$
+        button#fraction.btn.btn-primary(type='submit') $\frac{x}{y}$
+        button#squareRoot.btn.btn-primary(type='submit') $\sqrt{x}$
+        button#summation.btn.btn-primary(type='submit') $\displaystyle\sum_{r=1}^{n}$
+        button#integrationDefinite.btn.btn-primary(type='submit') $\int_0^1 f(x)\,\mathrm{d}x$
+        button#integration.btn.btn-primary(type='submit') $\int f(x)\,\mathrm{d}x$
+        button#modulus.btn.btn-primary(type='submit') $| x |$
+        button#dydx.btn.btn-primary(type='submit') $\frac{\mathrm dy}{\mathrm d x}$
+        button#dSpacedx.btn.btn-primary(type='submit') $\frac{\mathrm d}{\mathrm d x}\left( f(x) \right)$
+        button#setReal.btn.btn-primary(type='submit') $\mathbb{R}$
+        button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
+        button#forAll.btn.btn-primary(type='submit') $\forall$
+        button#belongTo.btn.btn-primary(type='submit') $\in$
+
+  button#postAnswer.btn.btn-primary(type='submit') Submit

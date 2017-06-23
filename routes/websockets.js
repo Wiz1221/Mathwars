@@ -43,7 +43,7 @@ module.exports = (io) => {
       // historyAllUser[socket.request.user._id].room = roomName;
       io.sockets.in(roomName).emit('user ready to compete');
       io.to(data).emit('private invite to compete',{
-        current user: currentUserFrontEnd,
+        user: currentUserFrontEnd,
         room: roomName
       });
     })
@@ -57,10 +57,10 @@ module.exports = (io) => {
 
     socket.on('user accepted invite', (data)=>{
       console.log('user accepted invite');
-      acceptInvite = true;
-      historyAllUser[socket.request.user._id].room = historyAllUser[data.userthatinvitedyouid].room;
-      socket.join(historyAllUser[socket.request.user._id].room);
-      io.sockets.in(historyAllUser[socket.request.user._id].room).emit('start first question',historyAllUser[socket.request.user._id].room);
+      console.log(data);
+      //historyAllUser[socket.request.user._id].room = historyAllUser[data.userthatinvitedyouid].room;
+      socket.join(data.room);
+      io.sockets.in(data.room).emit('start first question',data.room);
     })
 
     socket.on('question 1 correct', ()=>{

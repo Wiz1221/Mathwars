@@ -16,19 +16,3 @@ block content
           h2 View and Answer Questions
           p view questions and submit answers 
           a.btn.btn-default(href='/viewQuestions' role='button') View details »
-        .col-sm-12
-          h2 1v1 competition
-          p choose or compose questions and setup a competition with your friends!
-          a.btn.btn-default(href='/1v1', role='button') View details »
-
-  #editform.modal.fade(tabindex='-1', role='dialog')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') ×
-          h4#promptMessageTitle.modal-title Success
-        #promptMessage.modal-body
-          | Post Successful
-        .modal-footer
-          button.btn.btn-primary.close(type='button', data-dismiss='modal') Close
