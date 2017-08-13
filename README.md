@@ -3,7 +3,7 @@
 Mathwars is a Question and Answer website project, developed by General Assembly Singapore, Web Development Immersive 10 student.
 Users can input Math Symbols by clicking on preset buttons.
 
-View my site at http://pure-ridge-10154.herokuapp.com/
+View my site at https://mathwars.herokuapp.com/
 
 ### Tech
 
