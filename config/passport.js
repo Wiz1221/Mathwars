@@ -61,7 +61,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_ID,
   clientSecret: process.env.FACEBOOK_SECRET,
-  callbackURL: 'http://pure-ridge-10154.herokuapp.com/auth/facebook/callback',
+  callbackURL: 'https://mathwars.herokuapp.com/auth/facebook/callback',
   profileFields: ['name', 'email', 'link', 'locale', 'timezone'],
   passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {
@@ -120,7 +120,7 @@ passport.use(new FacebookStrategy({
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_KEY,
   consumerSecret: process.env.TWITTER_SECRET,
-  callbackURL: '/auth/twitter/callback',
+  callbackURL: 'https://mathwars.herokuapp.com/auth/twitter/callback',
   passReqToCallback: true
 }, (req, accessToken, tokenSecret, profile, done) => {
   if (req.user) {
@@ -174,7 +174,7 @@ passport.use(new TwitterStrategy({
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_ID,
   clientSecret: process.env.GOOGLE_SECRET,
-  callbackURL: '/auth/google/callback',
+  callbackURL: 'https://mathwars.herokuapp.com/auth/google/callback',
   passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {
   if (req.user) {
