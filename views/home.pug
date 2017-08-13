@@ -1,18 +1,38 @@
 extends layout
 
 block content
+  //- #carouselExampleIndicators.carousel.slide(data-ride='carousel')
+  //-   ol.carousel-indicators
+  //-     li.active(data-target='#carouselExampleIndicators', data-slide-to='0')
+  //-     li(data-target='#carouselExampleIndicators', data-slide-to='1')
+  //-     li(data-target='#carouselExampleIndicators', data-slide-to='2')
+  //-   .carousel-inner(role='listbox')
+  //-     .carousel-item.active
+  //-       img.d-block.img-fluid(src='...', alt='First slide')
+  //-     .carousel-item
+  //-       img.d-block.img-fluid(src='...', alt='Second slide')
+  //-     .carousel-item
+  //-       img.d-block.img-fluid(src='...', alt='Third slide')
+  //-   a.carousel-control-prev(href='#carouselExampleIndicators', role='button', data-slide='prev')
+  //-     span.carousel-control-prev-icon(aria-hidden='true')
+  //-     span.sr-only Previous
+  //-   a.carousel-control-next(href='#carouselExampleIndicators', role='button', data-slide='next')
+  //-     span.carousel-control-next-icon(aria-hidden='true')
+  //-     span.sr-only Next
+  .introduction
+    .homeImage
+
   .row
-    .col-sm-6
+    .col-sm-12
       h1 Math Wars
       p.lead Post Questions and Compete with your friends
       hr
-    .col-sm-6
-      .row
-        .col-sm-12
-          h2 Compose
-          p Compose a question and post it
-          a.btn.btn-default(href='/Compose', role='button') View details »
-        .col-sm-12
-          h2 View and Answer Questions
-          p view questions and submit answers 
-          a.btn.btn-default(href='/viewQuestions' role='button') View details »
+  .row
+    .col-sm-6.home-compose-container
+      h2 Compose
+      p Compose a question and post it
+      a.btn.btn-default(href='/Compose', role='button') View details »
+    .col-sm-6.home-archive-container
+      h2 View and Answer Questions
+      p view questions and submit answers 
+      a.btn.btn-default(href='/viewQuestions' role='button') View details »

@@ -3,12 +3,25 @@ extends ../layout
 block content
   .page-header
     h2
-      i.fa.fa-picture-o
+      img(src='https://i1.wp.com/memolition.com/wp-content/uploads/2014/08/25-gifs-that-teach-you-math-concepts-43497.gif?fit=400%2C400', style='width:50px;')
       | View Questions
   .row#questionPreview
     each question in questions
-      .col-sm-3
         form(action='/questionDetails/'+question._id, method='get')
-          button(name=id value=question._id,type='submit')
-            p= question.question.content
-            p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear() 
+          button.question-container(name=id,value=question._id,type='submit',style='width: 100%; height: 100px; ')
+            .row
+              .col-sm-1.answer-view-container(style='height: 100px;')
+                if question.answer
+                  div.numberOfAnwers=question.answer.length
+                  div answers
+                else
+                  div.numberOfAnwers 0
+                  div answers
+              .col-sm-11(style='height: 100px;')
+                div.question-content-container
+                  div.question-title=question.question.title
+                  div.question-content= question.question.content
+                  div.question-topic= '(' + question.question.topic + ')'
+                  div.question-created-on.pull-right
+                    div= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+                    div= 'by '+ question.createdBy.name

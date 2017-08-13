@@ -8909,7 +8909,8 @@ html {
 
 body {
   padding-top: 60px;
-  margin-bottom: 75px; }
+  margin-bottom: 75px;
+  font-family: "Times New Roman", Georgia, Serif; }
 
 footer {
   position: absolute;
@@ -9046,3 +9047,69 @@ textarea {
 .funkyradio-info input[type="checkbox"]:checked ~ label:before {
   color: #fff;
   background-color: #5bc0de; }
+
+.introduction {
+  width: 100%;
+  height: 70vh;
+  background-image: url("http://www.mq.edu.au/__data/assets/image/0009/103599/Mathematics-929.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover; }
+
+.page-header #composeImage {
+  width: 50px;
+  height: 50px; }
+
+.question-container {
+  border: 1px solid #bfbfbf;
+  border-radius: 5px;
+  position: relative;
+  background-color: transparent;
+  text-align: left; }
+
+.question-container:hover {
+  transform: scale(1.02); }
+
+.question-container:focus {
+  outline: none; }
+
+.question-container:after {
+  transform: scale(1); }
+
+.question-created-on {
+  position: absolute;
+  bottom: 10%;
+  right: 4%; }
+
+.question-content-container {
+  padding: 10px; }
+
+.question-title {
+  font-weight: 600;
+  font-size: 1.2em; }
+
+.answer-view-container {
+  margin-top: 20px;
+  text-align: center; }
+
+#mathSymbolWrapperQuestion button, #mathSymbolWrapperAnswer button {
+  min-width: 60px;
+  height: 60px; }
+
+#preview, #previewAnswer {
+  min-height: 40px; }
+
+.detail-container {
+  padding: 10px;
+  border-top: 1px dashed grey;
+  border-bottom: 1px dashed grey; }
+
+.created-by {
+  text-align: right; }
+
+.answer-header {
+  margin-top: 30px;
+  margin-bottom: 10px; }
+
+#deleteQuestion {
+  margin-top: 10px; }

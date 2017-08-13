@@ -3,7 +3,6 @@ extends ../layout
 block content
   .page-header
     h2
-      i.fa.fa-picture-o
       | Question Details
   #editform.modal.fade(tabindex='-1', role='dialog')
     .modal-dialog(role='document')
@@ -20,25 +19,37 @@ block content
       .col-sm-7
         h4 Question
         each question in questions
-          p#getQuestionId(data-id=question._id)= question.question.content
-          p= 'created on'+" "+ question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+          div.detail-container
+            p#getQuestionId(data-id=question._id)= question.question.content
+            div.created-by.row
+              div.col-lg-8
+              div.col-lg-4  
+                p= 'created by ' + question.createdBy.name
+                p= 'on ' + question._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
   .row
     .col-sm-7
       each question in questions
-        h4 Answers
-        each answer,index in question.answer
-          if answer.length==0
-            p this question has no answer, help post an answer :)
-          else
-            span= 'Answer'+ ' ' + parseInt(index+1)
-              p= answer.content
-              p= 'created by'+' '+ answer.answeredBy.name
-              p= 'created on'+" "+ answer._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+        h4.answer-header Answers
+        if question.answer.length == 0
+          p this question has no answer, help post an answer :)
+        else 
+          each answer,index in question.answer
+            div.detail-container
+              span= 'Answer'+ ' ' + parseInt(index+1)
+                p= answer.content
+                div.created-by.row
+                  div.col-lg-8
+                  div.col-lg-4 
+                    p= 'created by'+' '+ answer.answeredBy.name
+                    p= 'created on'+" "+ answer._id.getTimestamp().getDate() + '-' + parseInt(question._id.getTimestamp().getMonth()+1) + '-' + question._id.getTimestamp().getFullYear()
+
   .row
     .col-sm-7
       h4 Post an answer
       #inputAnswerWrapper.input-group
           textarea#Answer.wmd-input.processed.form-control(type='text', placeholder='type your question here')
+          div#previewAnswer
+            | ${}$
     .col-sm-5
       #mathSymbolWrapperAnswer
         button#theta.btn.btn-primary(type='submit') $\theta$
@@ -48,21 +59,19 @@ block content
         button#alpha.btn.btn-primary(type='submit') $\alpha$
         button#beta.btn.btn-primary(type='submit') $\beta$
         button#mu.btn.btn-primary(type='submit') $\mu$
+        button#setReal.btn.btn-primary(type='submit') $\mathbb{R}$
+        button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
+        button#forAll.btn.btn-primary(type='submit') $\forall$
+        button#belongTo.btn.btn-primary(type='submit') $\in$
         button#power.btn.btn-primary(type='submit') $x^{n}$
-        button#vectorial.btn.btn-primary(type='submit') !
+        button#modulus.btn.btn-primary(type='submit') $| x |$
         button#nChooseR.btn.btn-primary(type='submit') $ \binom{n}{r}$
         button#fraction.btn.btn-primary(type='submit') $\frac{x}{y}$
         button#squareRoot.btn.btn-primary(type='submit') $\sqrt{x}$
         button#summation.btn.btn-primary(type='submit') $\displaystyle\sum_{r=1}^{n}$
         button#integrationDefinite.btn.btn-primary(type='submit') $\int_0^1 f(x)\,\mathrm{d}x$
         button#integration.btn.btn-primary(type='submit') $\int f(x)\,\mathrm{d}x$
-        button#modulus.btn.btn-primary(type='submit') $| x |$
         button#dydx.btn.btn-primary(type='submit') $\frac{\mathrm dy}{\mathrm d x}$
         button#dSpacedx.btn.btn-primary(type='submit') $\frac{\mathrm d}{\mathrm d x}\left( f(x) \right)$
-        button#setReal.btn.btn-primary(type='submit') $\mathbb{R}$
-        button#setInteger.btn.btn-primary(type='submit') $\mathbb{Z}$
-        button#forAll.btn.btn-primary(type='submit') $\forall$
-        button#belongTo.btn.btn-primary(type='submit') $\in$
         
   button#submitAnswer.btn.btn-primary(type='submit') Submit
-  button#saveQuestion.btn.btn-primary(type='submit') Save As Draft

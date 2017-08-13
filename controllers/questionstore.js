@@ -22,19 +22,6 @@ exports.storePost = (req, res, next) => {
       id: req.user.id,
       name: req.user.profile.name
     };
-    if(req.body.answer!==''){
-      newQuestion.answer = [];
-      newQuestion.answer.push({
-        content:req.body.answer,
-        answeredBy: {
-          id: req.user.id,
-          name: req.user.profile.name
-        }
-      })
-    }else{
-      newQuestion.answer = '';
-      newQuestion.answeredBy = [];
-    }
     newQuestion.save(
       function(err){
         if(err){
@@ -43,5 +30,5 @@ exports.storePost = (req, res, next) => {
       //   return done(null, newQuestion, req.flash('loginMessage', 'Logged in successfully'));
     });
     res.json(newQuestion);
-}
+  }
 }
