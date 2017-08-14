@@ -9065,7 +9065,8 @@ textarea {
   border-radius: 5px;
   position: relative;
   background-color: transparent;
-  text-align: left; }
+  text-align: left;
+  margin-bottom: 5px; }
 
 .question-container:hover {
   transform: scale(1.02); }

@@ -257,6 +257,9 @@ textarea {
 #questionPreview {
   // margin: 0;
 }
+// .question-main-wrapper {
+//   margin-bottom: 10px;
+// }
 
 .question-container {
   border: 1px solid rgb(191,191,191);
@@ -264,6 +267,7 @@ textarea {
   position:relative;
   background-color: transparent;
   text-align: left;
+  margin-bottom: 5px;
 }
 
 .question-container:hover{

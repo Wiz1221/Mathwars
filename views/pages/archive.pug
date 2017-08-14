@@ -7,18 +7,17 @@ block content
       | View Questions
   .row#questionPreview
     each question in questions
-        form(action='/questionDetails/'+question._id, method='get')
+        form.question-main-wrapper(action='/questionDetails/'+question._id, method='get')
           button.question-container(name=id,value=question._id,type='submit',style='width: 100%; height: 100px; ')
-            .row
-              .col-sm-1.answer-view-container(style='height: 100px;')
+              .col-lg-1.col-md-1.col-sm-2.col-xs-2.answer-view-container
                 if question.answer
                   div.numberOfAnwers=question.answer.length
                   div answers
                 else
                   div.numberOfAnwers 0
                   div answers
-              .col-sm-11(style='height: 100px;')
-                div.question-content-container
+              div.question-content-container.col-lg-11.col-md-11.col-sm-10.col-xs-10
+                
                   div.question-title=question.question.title
                   div.question-content= question.question.content
                   div.question-topic= '(' + question.question.topic + ')'

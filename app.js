@@ -27,7 +27,7 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.load({ path: '.env.example' });
+dotenv.load({ path: '.env' });
 
 
 
@@ -49,9 +49,7 @@ const passportConfig = require('./config/passport');
  * Connect to MongoDB.
  */
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI);
-  //process.env.MONGODB_URI || process.env.MONGOLAB_URI);
-  // process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on('error', (err) => {
   console.error(err);
   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
@@ -94,7 +92,7 @@ app.use(Session);
 io.use(passportSocketIo.authorize({
   cookieParser: cookieParser,       // the same middleware you registrer in express
   key:          'connect.sid',       // the name of the cookie where express/connect stores its session_id
-  secret:       "WDI-Singapore",    // the session_secret to parse the cookie
+  secret:       process.env.SESSION_SECRET,    // the session_secret to parse the cookie
   store:        sessionStore,
   // success:      onAuthorizeSuccess,  // *optional* callback on success
   // fail:         onAuthorizeFail,     // *optional* callback on fail/error
